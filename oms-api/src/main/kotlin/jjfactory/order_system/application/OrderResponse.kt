@@ -6,9 +6,9 @@ data class OrderResponse(
     val id: String,
     val orderBase: OrderBase,
     val orderer: Orderer,
-    val orderProduct: OrderProduct,
-    val orderDeliveryRequest: OrderDeliveryRequest,
-    val orderDelivery: OrderDelivery
+    val orderProduct: OrderProduct? = null,
+    val orderDeliveryRequest: OrderDeliveryRequest? = null,
+    val orderDelivery: OrderDelivery? = null
 )
 
 data class OrderBase(
@@ -69,4 +69,10 @@ data class OrderDelivery(
     val shippingMethod: String,
     val deliveryCompanyCode: String,
     val invoiceNumber: String
+)
+
+data class OrderResponseMock(
+    val id: String,
+    val orderBase: OrderBase,
+    val orderer: Orderer,
 )

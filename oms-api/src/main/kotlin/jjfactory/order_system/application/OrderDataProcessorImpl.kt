@@ -1,13 +1,14 @@
 package jjfactory.order_system.application
 
+import jjfactory.order_system.common.config.RestTemplateConfig
 import jjfactory.order_system.domain.Order
 import jjfactory.order_system.domain.OrderState
-import org.springframework.beans.factory.annotation.Value
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.core.ParameterizedTypeReference
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
-import org.springframework.http.MediaType
+import org.springframework.http.*
+import org.springframework.http.converter.HttpMessageConversionException
 import org.springframework.retry.annotation.Backoff
 import org.springframework.retry.annotation.Retryable
 import org.springframework.stereotype.Component
@@ -21,24 +22,31 @@ import java.time.LocalDate
 class OrderDataProcessorImpl(
     private val restTemplate: RestTemplate
 ) : OrderDataProcessor {
-
-    @Value("\${order-api.uri}")
-    private lateinit var ORDER_API_URL: String
+    private val logger: Logger = LoggerFactory.getLogger(RestTemplateConfig::class.java)
 
     @Retryable(
         maxAttempts = 3,
         backoff = Backoff(delay = 1000),
-        include = [IOException::class]
+        include = [IOException::class],
+        exclude = [HttpMessageConversionException::class]
     )
-    override fun processData(date: LocalDate): List<Order> {
-        val (entity, uri) = buildOrderUri(date)
+    override fun processData(date: LocalDate, url: String): List<Order> {
+        val (entity, uri) = buildOrderUri(date, url)
 
-        val responseEntity = restTemplate.exchange(
-            uri,
-            HttpMethod.GET,
-            entity,
-            object : ParameterizedTypeReference<List<OrderResponse>>() {}
-        )
+        lateinit var responseEntity: ResponseEntity<List<OrderResponse>>
+
+        try {
+            responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.GET,
+                entity,
+                object : ParameterizedTypeReference<List<OrderResponse>>() {}
+            )
+        } catch (e: HttpMessageConversionException) {
+            logger.error("json parse failed..")
+            //todo noti logic
+            return emptyList()
+        }
 
         val orderResponses = responseEntity.body
 
@@ -52,14 +60,14 @@ class OrderDataProcessorImpl(
         } ?: emptyList()
     }
 
-    private fun buildOrderUri(date: LocalDate): Pair<HttpEntity<String>, URI> {
+    private fun buildOrderUri(date: LocalDate, url: String): Pair<HttpEntity<String>, URI> {
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
 
         val entity = HttpEntity<String>(headers)
         val params = mapOf("date" to date)
 
-        val uri = UriComponentsBuilder.fromHttpUrl(ORDER_API_URL)
+        val uri = UriComponentsBuilder.fromHttpUrl(url)
             .queryParam("date", "{date}")
             .buildAndExpand(params)
             .toUri()

@@ -1,0 +1,2 @@
+order-api:
+  uri: "http://localhost:8090/v1/orders"
