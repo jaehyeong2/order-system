@@ -6,7 +6,7 @@ import java.time.LocalDate
 @Component
 class OrderFacade(
     private val orderDataProcessor: OrderDataProcessor,
-    private val orderService: OderService
+    private val orderService: OrderService
 ) {
 
     fun fetchOrders(date: LocalDate) {

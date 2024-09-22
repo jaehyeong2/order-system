@@ -1,6 +1,6 @@
 package jjfactory.order_system.presentation
 
-import jjfactory.order_system.application.OderService
+import jjfactory.order_system.application.OrderService
 import jjfactory.order_system.application.OrderFacade
 import jjfactory.order_system.common.CommonResponse
 import jjfactory.order_system.domain.OrderInfo
@@ -16,7 +16,7 @@ import java.time.LocalDate
 @RequestMapping("/v1/orders")
 @RestController
 class OrderApi(
-    private val orderService: OderService,
+    private val orderService: OrderService,
     private val orderFacade: OrderFacade
 ) {
 

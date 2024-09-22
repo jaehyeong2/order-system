@@ -7,9 +7,9 @@ import jjfactory.order_system.repository.OrderRepository
 import org.springframework.stereotype.Service
 
 @Service
-class OderServiceImpl(
+class OrderServiceImpl(
     private val orderRepository: OrderRepository,
-) : OderService {
+) : OrderService {
 
     override fun save(order: Order) {
         orderRepository.save(order)
