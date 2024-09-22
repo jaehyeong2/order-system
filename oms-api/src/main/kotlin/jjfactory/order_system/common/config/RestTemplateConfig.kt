@@ -1,4 +1,4 @@
-package jjfactory.order_system.config
+package jjfactory.order_system.common.config
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

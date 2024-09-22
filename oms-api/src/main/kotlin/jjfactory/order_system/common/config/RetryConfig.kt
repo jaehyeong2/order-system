@@ -1,4 +1,4 @@
-package jjfactory.order_system.config
+package jjfactory.order_system.common.config
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.retry.annotation.EnableRetry
