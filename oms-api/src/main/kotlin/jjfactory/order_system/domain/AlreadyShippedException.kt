@@ -1,4 +1,4 @@
-package jjfactory.order_system
+package jjfactory.order_system.domain
 
 class AlreadyShippedException: RuntimeException() {
 }

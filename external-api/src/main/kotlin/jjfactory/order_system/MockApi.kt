@@ -11,14 +11,14 @@ import java.time.LocalDate
 class MockApi {
 
     @GetMapping
-    fun getOrders(@RequestParam date: String): List<OrderResponse> {
+    fun getOrders(@RequestParam date: LocalDate): List<OrderResponse> {
         val sampleOrder = OrderResponse(
             id = 3000805151L,
             orderBase = OrderBase(
                 id = 3000805151L,
                 paymentId = 3000749085L,
                 status = OrderState.values().random().toString(),
-                createdAt = "20240604140633",
+                createdAt = date.atStartOfDay(),
                 paidAt = "20240604140719",
                 modifiedAt = "20240604145319"
             ),

@@ -1,5 +1,6 @@
-package jjfactory.order_system
+package jjfactory.order_system.repository
 
+import jjfactory.order_system.ResourceNotFoundException
 import jjfactory.order_system.domain.Order
 import org.springframework.stereotype.Repository
 
