@@ -1,5 +1,7 @@
 package jjfactory.order_system
 
+import java.time.LocalDateTime
+
 data class OrderResponse(
     val id: Long,
     val orderBase: OrderBase,
@@ -13,7 +15,7 @@ data class OrderBase(
     val id: Long,
     val paymentId: Long,
     val status: String,
-    val createdAt: String,
+    val createdAt: LocalDateTime,
     val paidAt: String,
     val modifiedAt: String
 )
