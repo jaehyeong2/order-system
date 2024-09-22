@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.http.client.ClientHttpRequestFactory
 import org.springframework.http.client.ClientHttpRequestInterceptor
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory
-import org.springframework.web.client.DefaultResponseErrorHandler
 import org.springframework.web.client.RestTemplate
+
 
 @Configuration
 class RestTemplateConfig {
@@ -19,35 +19,15 @@ class RestTemplateConfig {
         val factory: ClientHttpRequestFactory = httpRequestFactory()
         val restTemplate = RestTemplate(factory)
 
-//        restTemplate.interceptors.add(loggingInterceptor())
-//        restTemplate.errorHandler = CustomResponseErrorHandler()
-
+        restTemplate.interceptors.add(loggingInterceptor())
         return restTemplate
     }
 
     private fun httpRequestFactory(): ClientHttpRequestFactory {
         val factory = HttpComponentsClientHttpRequestFactory()
         factory.setConnectTimeout(5000)
-//        factory.setReadTimeout(10000)
         factory.setConnectionRequestTimeout(5000)
         return factory
-    }
-
-    /**
-     * 커스텀 에러 핸들러
-     */
-    class CustomResponseErrorHandler : DefaultResponseErrorHandler() {
-//        override fun hasError(statusCode: org.springframework.http.HttpStatus): Boolean {
-//            return super.hasError(statusCode)
-//        }
-//
-//        override fun handleError(
-//            statusCode: org.springframework.http.HttpStatus,
-//            response: org.springframework.http.client.ClientHttpResponse
-//        ) {
-//            super.handleError(statusCode, response)
-//            // throw CustomException("Error occurred with status code: $statusCode")
-//        }
     }
 
     /**
@@ -70,8 +50,6 @@ class RestTemplateConfig {
             logger.info("Status Code : ${response.statusCode}")
             logger.info("Status Text : ${response.statusText}")
             logger.info("Headers      : ${response.headers}")
-            val responseBody = response.body.bufferedReader()?.use { it.readText() } ?: ""
-            logger.info("Response Body: $responseBody")
             logger.info("=== Response End ===")
 
             response
