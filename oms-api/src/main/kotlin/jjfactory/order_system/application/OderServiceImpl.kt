@@ -47,6 +47,9 @@ class OderServiceImpl(
     }
 
     override fun cancelOrder(orderId: String) {
-        return orderRepository.findByOrderId(orderId).cancel()
+        val order = orderRepository.findByOrderId(orderId)
+        order.cancel()
+
+        orderRepository.modify(order)
     }
 }

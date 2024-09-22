@@ -13,6 +13,11 @@ class OrderRepository {
         store[order.orderId] = order
     }
 
+    fun modify(order: Order){
+        store[order.orderId] ?: throw ResourceNotFoundException()
+        store[order.orderId] = order
+    }
+
     fun findByOrderId(orderId: String): Order {
         return store[orderId] ?: throw ResourceNotFoundException()
     }
