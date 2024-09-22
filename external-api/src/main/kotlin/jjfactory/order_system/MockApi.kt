@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDate
+import java.util.Random
 
 @RequestMapping("/v1/orders")
 @RestController
@@ -13,9 +14,9 @@ class MockApi {
     @GetMapping
     fun getOrders(@RequestParam date: LocalDate): List<OrderResponse> {
         val sampleOrder = OrderResponse(
-            id = 3000805151L,
+            id = Random().nextLong(),
             orderBase = OrderBase(
-                id = 3000805151L,
+                id = Random().nextLong(),
                 paymentId = 3000749085L,
                 status = OrderState.values().random().toString(),
                 createdAt = date.atStartOfDay(),

@@ -26,7 +26,11 @@ class OderServiceImpl(
         }
     }
 
-    override fun getList(states: List<OrderState>): List<OrderInfo.List> {
+    override fun getList(stateStrings: List<String>): List<OrderInfo.List> {
+        val states = stateStrings.map {
+            OrderState.valueOf(it)
+        }
+
         return orderRepository.getList()
             .filter {
                 if (states.isNotEmpty()) states.contains(it.state)
